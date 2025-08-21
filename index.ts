@@ -22,6 +22,8 @@ bot.on("text", async (ctx) => {
   }
 
   try {
+    const statusMessage = await ctx.reply("Ожидайте, скачиваем видео...");
+
     const options = {
       method: "GET",
       url: process.env.RAPIDAPI_URL || "",
@@ -36,11 +38,19 @@ bot.on("text", async (ctx) => {
     const videoUrl = response.data?.data?.play || response.data?.data?.hdplay;
 
     if (!videoUrl) {
+      await ctx.telegram.deleteMessage(ctx.chat.id, statusMessage.message_id);
       return ctx.reply("Не удалось получить видео по этой ссылке");
     }
 
     await ctx.replyWithVideo({ url: videoUrl });
-  } catch (error) {
+
+    await new Promise<void>((resolve) => {
+      return setTimeout(() => {
+        resolve();
+      }, 1500);
+    });
+    await ctx.telegram.deleteMessage(ctx.chat.id, statusMessage.message_id);
+  } catch {
     ctx.reply("Произошла ошибка при обработке видео");
   }
 });
