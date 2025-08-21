@@ -6,6 +6,8 @@ dotenv.config();
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN || "");
 
+bot.telegram.setMyCommands([{ command: "start", description: "Запуск бота" }]);
+
 bot.start((ctx) =>
   ctx.reply(
     "Отправьте ссылку на TikTok видео для скачивания без водяного знака"

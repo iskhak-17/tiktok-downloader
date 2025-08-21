@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node --esm index.ts"
+    "dev": "ts-node --esm index.ts",
+    "compose:up": "docker compose up --build -d",
+    "compose:down": "docker compose down"
   },
   "keywords": [],
   "author": "",
