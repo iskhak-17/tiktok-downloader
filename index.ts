@@ -1,4 +1,5 @@
 import { Telegraf } from "telegraf";
+import { message } from "telegraf/filters";
 import axios from "axios";
 import dotenv from "dotenv";
 
@@ -6,7 +7,9 @@ dotenv.config();
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN || "");
 
-bot.telegram.setMyCommands([{ command: "start", description: "Запуск бота" }]);
+bot.telegram.setMyCommands([
+  { command: "start", description: "Запустить бота" },
+]);
 
 bot.start((ctx) =>
   ctx.reply(
@@ -14,7 +17,7 @@ bot.start((ctx) =>
   )
 );
 
-bot.on("text", async (ctx) => {
+bot.on(message("text"), async (ctx) => {
   const url = ctx.message.text;
 
   if (!url.includes("tiktok.com")) {
@@ -26,11 +29,11 @@ bot.on("text", async (ctx) => {
 
     const options = {
       method: "GET",
-      url: process.env.RAPIDAPI_URL || "",
+      url: "https://tiktok-video-no-watermark2.p.rapidapi.com/",
       params: { url },
       headers: {
         "x-rapidapi-key": process.env.RAPIDAPI_KEY,
-        "x-rapidapi-host": process.env.RAPIDAPI_HOST,
+        "x-rapidapi-host": "tiktok-video-no-watermark2.p.rapidapi.com",
       },
     };
 
@@ -38,7 +41,6 @@ bot.on("text", async (ctx) => {
     const videoUrl = response.data?.data?.play || response.data?.data?.hdplay;
 
     if (!videoUrl) {
-      await ctx.telegram.deleteMessage(ctx.chat.id, statusMessage.message_id);
       return ctx.reply("Не удалось получить видео по этой ссылке");
     }
 
@@ -47,8 +49,9 @@ bot.on("text", async (ctx) => {
     await new Promise<void>((resolve) => {
       return setTimeout(() => {
         resolve();
-      }, 1500);
+      }, 2000);
     });
+
     await ctx.telegram.deleteMessage(ctx.chat.id, statusMessage.message_id);
   } catch {
     ctx.reply("Произошла ошибка при обработке видео");

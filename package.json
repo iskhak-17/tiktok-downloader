@@ -1,27 +1,24 @@
 {
-  "name": "tiktok-downloader",
+  "name": "tiktok-downloader-bot",
+  "private": true,
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
+    "dev": "ts-node --esm index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node --esm index.ts",
-    "compose:up": "docker compose up --build -d",
+    "compose:build": "docker compose build",
+    "compose:up": "docker compose up -d",
     "compose:down": "docker compose down"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
-  "devDependencies": {
-    "@types/node": "^24.3.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
   },
   "dependencies": {
     "axios": "^1.11.0",
     "dotenv": "^17.2.1",
     "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   }
 }
